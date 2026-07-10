@@ -29,7 +29,7 @@ public sealed class SideEffectBehaviorTests
     }
 
     [Fact]
-    public async Task SameExceptionInstanceRetrown_IsProcessedOnlyOnce()
+    public async Task SameExceptionInstanceRethrown_IsProcessedOnlyOnce()
     {
         var notifier = new RecordingHandler();
         await using var sut = CreateSideEffect(notifier, filter: new MatchAllFilter());
