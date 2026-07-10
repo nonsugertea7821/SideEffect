@@ -40,7 +40,7 @@ internal sealed class Dispatcher(Registry registry, Func<Type, object?> resolver
                 var invoker = registration.CreateInvoker(_resolver);
 
                 await invoker
-                    .HandleAsync(@event.Exception,cancellationToken)
+                    .HandleAsync(@event.Exception, cancellationToken)
                     .ConfigureAwait(false);
             }
             catch
