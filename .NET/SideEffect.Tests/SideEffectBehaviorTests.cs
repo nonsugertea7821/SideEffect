@@ -196,24 +196,23 @@ public sealed class SideEffectBehaviorTests
 
         public async Task<int> WaitForCountAsync(int expected, TimeSpan timeout)
         {
-            if (Volatile.Read(ref _count) >= expected)
+            if (expected <= 0)
             {
-                return _count;
+                return Volatile.Read(ref _count);
             }
 
             using var cts = new CancellationTokenSource(timeout);
-            using var registration = cts.Token.Register(static state =>
-            {
-                ((TaskCompletionSource)state!).TrySetCanceled();
-            }, _firstEvent);
 
-            try
+            while (Volatile.Read(ref _count) < expected && !cts.IsCancellationRequested)
             {
-                await _firstEvent.Task.ConfigureAwait(false);
-            }
-            catch (TaskCanceledException)
-            {
-                return _count;
+                try
+                {
+                    await Task.Delay(TimeSpan.FromMilliseconds(10), cts.Token).ConfigureAwait(false);
+                }
+                catch (TaskCanceledException)
+                {
+                    break;
+                }
             }
 
             return _count;
