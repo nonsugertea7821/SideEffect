@@ -27,7 +27,7 @@ internal sealed class Worker : IAsyncDisposable
 
         _dispatcher = dispatcher ?? throw new ArgumentNullException(nameof(dispatcher));
 
-        if (workerCount < 1){ workerCount = 1; }
+        if (workerCount < 1) { workerCount = 1; }
 
         _workers =
         [
