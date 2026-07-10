@@ -20,7 +20,7 @@ With SideEffect, your business logic doesn't choose between recovery and observa
            │
            ▼ (An Exception Occurs)
 ┌─────────────────────────────────────────┐
-│  SideEffect.Notify(exception);          │ ──► [ SideEffect Pipeline ] (Safe & Async)
+│  throw SideEffectException              │ ──► [ SideEffect Pipeline ] (Safe & Async)
 └─────────────────────────────────────────┘          │
            │                                         ├─► Send Slack Alert
            ▼ (Graceful Recovery)                     ├─► Increment Telemetry Metrics
