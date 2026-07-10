@@ -1,0 +1,39 @@
+name: .NET Tests
+
+on:
+  push:
+    branches:
+      - main
+      - dotnet-main
+    paths:
+      - .NET/**
+      - .github/workflows/dotnet-tests.yml
+  pull_request:
+    paths:
+      - .NET/**
+      - .github/workflows/dotnet-tests.yml
+
+jobs:
+  test-dotnet:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .NET
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET SDK
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Restore
+        run: dotnet restore ./SideEffect.Tests/SideEffect.Tests.csproj
+
+      - name: Build
+        run: dotnet build ./SideEffect.Tests/SideEffect.Tests.csproj --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test ./SideEffect.Tests/SideEffect.Tests.csproj --configuration Release --no-build --verbosity normal
